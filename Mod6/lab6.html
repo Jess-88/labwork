@@ -1,0 +1,61 @@
+import React from "react";
+
+function Greeting(props) {
+  return <h1>Hello {props.name}</h1>;
+}
+
+function App() {
+  return <Greeting name="John" />;
+}
+
+export default App;
+
+2.
+import React, { useState } from "react";
+
+function Greeting() {
+  const [name, setName] = useState("World");
+
+  function handleGreet() {
+    setName("");
+  }
+
+  return (
+    <div>
+      <h1>Hello {name}</h1>
+      <button onClick={handleGreet}>Greet</button>
+    </div>
+  );
+}
+
+function App() {
+  return <Greeting />;
+}
+
+export default App;
+3.
+import React, { useState } from "react";
+
+const happy = '😄';
+const sad = '😢';
+
+function Emoji() {
+  const [isHappy, setIsHappy] = useState(true);
+
+  function handleToggleEmoji() {
+    setIsHappy(!isHappy);
+  }
+
+  return (
+    <div>
+      <h1>{isHappy ? happy : sad}</h1>
+      <button onClick={handleToggleEmoji}>Toggle Emoji</button>
+    </div>
+  );
+}
+
+function App() {
+  return <Emoji />;
+}
+
+export default App;

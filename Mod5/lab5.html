@@ -1,0 +1,234 @@
+const express = require("express");
+
+const app1 = express();
+const app2 = express();
+const app3 = express();
+
+const port1 = 3000;
+const port2 = 3001;
+const port3 = 3002;
+
+app1.get("/", (req, res) => {
+  res.send("Hello from Server 1!");
+});
+
+app2.get("/", (req, res) => {
+  res.send("Hello from Server 2!");
+});
+
+app3.get("/", (req, res) => {
+  res.send("Hello from Server 3!");
+});
+
+app1.listen(port1, () => {
+  console.log(`Server 1 listening at http://localhost:3000`);
+});
+
+app2.listen(port2, () => {
+  console.log(`Server 2 listening at http://localhost:3001`);
+});
+
+app3.listen(port3, () => {
+  console.log(`Server 3 listening at http://localhost:$3002`);
+});
+
+2. 
+const express = require("express");
+const path = require("path");
+
+const app = express();
+
+const calculatorRouter = express.Router();
+
+calculatorRouter.get("/add", (req, res) => {
+  const { num1, num2 } = req.query;
+  const result = parseInt(num1) + parseInt(num2);
+  res.json({ result });
+});
+
+calculatorRouter.get("/subtract", (req, res) => {
+  const { num1, num2 } = req.query;
+  const result = parseInt(num1) - parseInt(num2);
+  res.json({ result });
+});
+
+calculatorRouter.get("/multiply", (req, res) => {
+  const { num1, num2 } = req.query;
+  const result = parseInt(num1) * parseInt(num2);
+  res.json({ result });
+});
+
+calculatorRouter.get("/divide", (req, res) => {
+  const { num1, num2 } = req.query;
+  const result = parseInt(num1) / parseInt(num2);
+  res.json({ result });
+});
+
+app.use("/calculator", calculatorRouter);
+
+app.use(express.static(path.join(__dirname, "public")));
+
+const port = 3000;
+
+app.listen(port, () => {
+  console.log(`Server listening at http://localhost:3000`);
+});
+
+2.5.
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Calculator</title>
+  </head>
+  <body>
+    <h1>Add Result:</h1>
+    <h3 id="add-result"></h3>
+    <h1>Subtract Result:</h1>
+    <h3 id="subtract-result"></h3>
+    <h1>Multiply Result:</h1>
+    <h3 id="multiply-result"></h3>
+    <h1>Divide Result:</h1>
+    <h3 id="divide-result"></h3>
+    <script>
+      const num1 = 10;
+      const num2 = 5;
+
+      const addResultEl = document.getElementById("add-result");
+      const subtractResultEl = document.getElementById("subtract-result");
+      const multiplyResultEl = document.getElementById("multiply-result");
+      const divideResultEl = document.getElementById("divide-result");
+
+      fetch(`/calculator/add?num1=${num1}&num2=${num2}`)
+        .then((response) => response.json())
+        .then((data) => {
+          addResultEl.innerText = data.result;
+        });
+
+      fetch(`/calculator/subtract?num1=${num1}&num2=${num2}`)
+        .then((response) => response.json())
+        .then((data) => {
+          subtractResultEl.innerText = data.result;
+        });
+
+      fetch(`/calculator/multiply?num1=${num1}&num2=${num2}`)
+        .then((response) => response.json())
+        .then((data) => {
+          multiplyResultEl.innerText = data.result;
+        });
+
+      fetch(`/calculator/divide?num1=${num1}&num2=${num2}`)
+        .then((response) => response.json())
+        .then((data) => {
+          divideResultEl.innerText = data.result;
+        });
+    </script>
+  </body>
+</html>
+
+3.
+<!-- server code -->
+const express = require("express");
+
+const app = express();
+
+const calculatorRouter = express.Router();
+
+calculatorRouter.get("/add", (req, res) => {
+  const { num1, num2 } = req.query;
+  const result = parseInt(num1) + parseInt(num2);
+  res.json({ result });
+});
+
+calculatorRouter.get("/subtract", (req, res) => {
+  const { num1, num2 } = req.query;
+  const result = parseInt(num1) - parseInt(num2);
+  res.json({ result });
+});
+
+calculatorRouter.get("/multiply", (req, res) => {
+  const { num1, num2 } = req.query;
+  const result = parseInt(num1) * parseInt(num2);
+  res.json({ result });
+});
+
+calculatorRouter.get("/divide", (req, res) => {
+  const { num1, num2 } = req.query;
+  const result = parseInt(num1) / parseInt(num2);
+  res.json({ result });
+});
+
+calculatorRouter.get("/exponent", (req, res) => {
+  const { num1, num2 } = req.query;
+  const result = Math.pow(parseInt(num1), parseInt(num2));
+  res.json({ result });
+});
+
+app.use("/calculator", calculatorRouter);
+
+app.use(express.static("public"));
+
+const port = 3000;
+
+app.listen(port, () => {
+  console.log(`Server listening on port ${port}`);
+});
+
+<!-- html -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Calculator</title>
+  </head>
+  <body>
+    <h1>Add Result:</h1>
+    <h3 id="add-result"></h3>
+    <h1>Subtract Result:</h1>
+    <h3 id="subtract-result"></h3>
+    <h1>Multiply Result:</h1>
+    <h3 id="multiply-result"></h3>
+    <h1>Divide Result:</h1>
+    <h3 id="divide-result"></h3>
+    <h1>Exponent Result:</h1>
+    <h3 id="exponent-result"></h3>
+    <script>
+      const num1 = 10;
+      const num2 = 5;
+
+      const addResultEl = document.getElementById("add-result");
+      const subtractResultEl = document.getElementById("subtract-result");
+      const multiplyResultEl = document.getElementById("multiply-result");
+      const divideResultEl = document.getElementById("divide-result");
+      const exponentResultEl = document.getElementById("exponent-result");
+
+      fetch(`/calculator/add?num1=${num1}&num2=${num2}`)
+        .then((response) => response.json())
+        .then((data) => {
+          addResultEl.innerText = data.result;
+        });
+
+      fetch(`/calculator/subtract?num1=${num1}&num2=${num2}`)
+        .then((response) => response.json())
+        .then((data) => {
+          subtractResultEl.innerText = data.result;
+        });
+
+      fetch(`/calculator/multiply?num1=${num1}&num2=${num2}`)
+        .then((response) => response.json())
+        .then((data) => {
+          multiplyResultEl.innerText = data.result;
+        });
+
+      fetch(`/calculator/divide?num1=${num1}&num2=${num2}`)
+        .then((response) => response.json())
+        .then((data) => {
+          divideResultEl.innerText = data.result;
+        });
+
+      fetch(`/calculator/exponent?num1=${num1}&num2=${num2}`)
+        .then((response) => response.json())
+        .then((data) => {
+          exponentResultEl.innerText = data.result;
+        });
+    </script>
+  </body>
+</html>

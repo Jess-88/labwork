@@ -1,0 +1,60 @@
+const express = require('express');
+const mongoose = require('mongoose');
+const { Note } = require('./models');
+
+const app = express();
+app.use(express.json());
+
+const dbURI = 'mongodb://localhost:27017/notes-app';
+mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => {
+    console.log('Connected to database');
+    app.listen(3000, () => {
+      console.log('Server is listening on port 3000');
+    });
+  })
+  .catch(err => console.log(err));
+
+app.post('/notes', async (req, res) => {
+  const { name, content } = req.body;
+  if (!name || !content) {
+    return res.status(400).send('Both name and content must be sent');
+  }
+  if (typeof name !== 'string' || typeof content !== 'string') {
+    return res.status(400).send('Name and content must be a string');
+  }
+  try {
+    const note = new Note({ name, content });
+    await note.save();
+    res.send('Note successfully created');
+  } catch (err) {
+    console.log(err);
+    res.status(500).send('Server error');
+  }
+});
+
+app.get('/notes', async (req, res) => {
+  try {
+    const notes = await Note.find({});
+    const formattedNotes = notes.map(note => ({
+      name: note.name,
+      content: note.content,
+    }));
+    res.send(formattedNotes);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send('Server error');
+  }
+});
+
+<!-- for the model -->
+const mongoose = require('mongoose');
+
+const noteSchema = new mongoose.Schema({
+  name: String,
+  content: String,
+});
+
+const Note = mongoose.model('Note', noteSchema);
+
+module.exports = Note;
